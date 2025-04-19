@@ -72,3 +72,5 @@ MIT
 Ajout d’un mode sombre
 
 Prévisions météo horaires sur 7 jours
+
+Machine Learning
