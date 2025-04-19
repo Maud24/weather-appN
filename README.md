@@ -17,9 +17,6 @@ Insert gif or link to demo
 - Feature 2
 - Feature 3
 
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
 ## Run Locally
 
@@ -44,13 +41,13 @@ Open with VSCode
 Open with live server
 
 ```bash
-  npm run start
+  python -m http.server
 ```
 
 
 ## Authors
 
-- [@codewithsadee](https://www.github.com/codewithsadee)
+- [@codewithaudrey]
 
 ## License
 

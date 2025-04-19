@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeathApp</title>
+  <meta name="title" content="Weather App" />
+  <meta name="description" content="This weather app gives us weather predictions for different cities" />
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.css" />
+
+  <!-- Leaflet Velocity -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./assets/css/Style.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- PWA Meta -->
+  <meta name="theme-color" content="#007bff" />
+  <link rel="manifest" href="./assets/manifest.webmanifest" />
+  
+
+
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+
+
+    <div class="container">
+      <a href="#" class="logo">
+        <img src="./assets/images/logoWeather.PNG" width="200" height="58" alt="logo" />
+      </a>
+
+      <div class="search-view" data-search-view>
+        <div class="search-wrapper">
+          <input type="search" name="search" placeholder="Rechercher une ville..." autocomplete="off" class="search-field" data-search-field />
+          <span class="m-icon leading-icon">search</span>
+          <button type="button" class="icon-btn leading-icon has-state" aria-label="close search" data-search-toggler>
+            <span class="m-icon">arrow_back</span>
+          </button>
+        </div>
+        <div class="search-result" data-search-result></div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn has-state" type="button" aria-label="open search" data-search-toggler>
+          <span class="m-icon">search</span>
+        </button>
+        <a href="#/current-location" class="btn-primary has-state" data-current-location-btn>
+          <span class="m-icon">my_location</span>
+          <span class="span">Ma position</span>
+        </a>
+
+        
+      </div>
+
+     <!-- Icône du chatbot dans les actions de header -->
+      <div class="chatbot-toggle-wrapper">
+        <button type="button" id="chatbot-toggle" class="icon-btn chatbot-btn" aria-label="Ouvrir le chatbot">💬</button>
+      </div>
+
+    </div>
+ 
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <article class="container" data-container>
+      <!-- COLONNE GAUCHE -->
+      <div class="content-left">
+        <section class="section current-weather" aria-label="current weather" data-current-weather></section>
+        <section class="section forecast" aria-labelledby="forecast-label" data-5-day-forecast></section>
+
+        <section class="section">
+          <h2 class="title-2">Historique</h2>
+          <ul id="history-list" class="list-panel"></ul>
+        </section>
+
+        <section class="section">
+          <h2 class="title-2">Graphique de Température</h2>
+          <canvas id="tempChart" width="400" height="200"></canvas>
+        </section>
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <div class="content-right">
+        <section class="section" aria-label="Carte">
+          <h2 class="title-2">Carte Météo</h2>
+          <div id="map"></div>
+        </section>
+
+        <section class="section highlights" aria-labelledby="highlights-label" data-highlights></section>
+
+        <section class="section hourly-forecast" aria-label="hourly forecast" data-hourly-forecast></section>
+
+        <section class="section temperature-chart-section">
+            <h2 class="title-2">Courbe des températures</h2>
+            <canvas id="temperatureChart" width="100%" height="200"></canvas>
+          </section>
+          
+
+        <!-- Footer -->
+        <footer class="footer">
+          <p class="body-3">Copyright 2025 with codewithaudrey. All Rights Reserved.</p>
+          <p class="body-3">
+            Powered By
+            <a href="https://openweathermap.org/api" title="Free OpenWeather API" target="_blank" rel="noopener">
+              <img src="./assets/images/openweather.png" width="150" height="30" loading="lazy" alt="OpenWeather" />
+            </a>
+          </p>
+        </footer>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading" data-loading></div>
+    </article>
+  </main>
+
+  <!-- SECTION 404 -->
+  <section class="error-content" data-error-content>
+    <h2 class="heading">404</h2>
+    <p class="body-1">Page non trouvée !</p>
+    <a href="#/weather?lat=51.5073219&lon=-0.1276474" class="btn-primary">
+      <span class="span">Accueil</span>
+    </a>
+  </section>
+
+  
+   <!-- Modal d'alerte météo -->
+   <div class="alert-modal" id="alertModal">
+    <div class="alert-content">
+        <span class="close-btn" id="closeAlertBtn">&times;</span>
+        <h3>Alerte Météo</h3>
+        <p id="alertMessage">Il pleut dans votre ville, prenez un parapluie !</p>
+    </div>
+    </div>
+    
+
+    <!-- Fenêtre de Chatbot -->
+<div id="chatbot-window" class="chatbot hidden">
+  <div class="chatbot-header">
+    <span>🤖 Chat météo</span>
+    <button id="close-chatbot" type="button">✖</button>
+  </div>
+  <div class="chatbot-messages" id="chat-messages"></div>
+  <div class="chatbot-input">
+    <input type="text" id="chat-input" placeholder="Pose ta question..." />
+    <button id="send-chat" type="button">Envoyer</button>
+  </div>
+</div>
+
+ 
+   <!-- JS -->
+   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+   <script src="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
+   <script src="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.js"></script>
+   <script src="./assets/js/App1.js" type="module"></script>
+   <script src="./assets/js/route.js" type="module"></script>
+ 
+ 
+  
+</body>
+</html>
