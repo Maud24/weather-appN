@@ -1,35 +1,49 @@
+# 🌦️ WeatherIO – Application Météo Interactive
 
-# Project Title
+WeatherIO est une application météo complète, interactive et moderne, conçue pour fournir des **prévisions détaillées**, des **cartes météorologiques dynamiques**, et même une **assistance par chatbot intelligent**. Elle est idéale pour tous ceux qui veulent consulter la météo de manière intuitive et visuellement agréable.
 
-A brief description of what this project does and who it's for
+---
 
-## Tech Stack
+## 🧰 Tech Stack
 
-**Client:** HTML, CSS, JavaScript, API
+**Frontend :** HTML, CSS, JavaScript  
+**API :** [OpenWeatherMap](https://openweathermap.org/api)  
+**Librairies :** Leaflet.js, Chart.js, Leaflet-Velocity  
+**Autres :** GitHub Pages, PWA
 
-## Demo
+---
 
-Insert gif or link to demo
+## 🌐 Démo
 
-## Features
+🔗 [Voir la démo en ligne](https://ton-nom.github.io/weatherio-starter)
 
-- Feature 1
-- Feature 2
-- Feature 3
+*(Remplace le lien par l’URL GitHub Pages de ton projet)*
 
+---
 
-## Run Locally
+## ✨ Fonctionnalités principales
 
+- 🔎 Recherche de villes en temps réel
+- 🌍 Carte interactive avec couches météo (pluie, vent, température, nuages)
+- 📊 Graphiques des températures sur 24h et sur 5 jours
+- 📡 Prévisions météo détaillées (jour et heure)
+- 🌬️ Animation du vent (type Windy)
+- 📢 Système d’alertes météo (pluie, orages, etc.)
+- 🤖 Chatbot intelligent pour interroger la météo en langage naturel
+- 🖥️ Installation possible comme application (PWA)
+
+---
+
+## 🚀 Lancer le projet localement
 Clone the project
 
 ```bash
-  git clone https://link-to-project
-```
+git clone https://github.com/Maud24/weatherio-starter.git
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd weatherio-starter
 ```
 
 Open with VSCode
@@ -47,12 +61,14 @@ Open with live server
 
 ## Authors
 
-- [@codewithaudrey]
+- [@Maud24]
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+MIT
 
-## Support
+## À venir (Roadmap)
 
-For support, Join my [Patreon Comunity](https://www.patreon.com/codewithsadee/membership) or Subscribe My [YouTube Channel](https://youtube.com/@codewithsadee).
+Ajout d’un mode sombre
+
+Prévisions météo horaires sur 7 jours
