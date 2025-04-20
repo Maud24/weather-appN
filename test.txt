@@ -1,0 +1,8 @@
+✅ "Quel temps fait-il à Douala II, CM ?"
+
+✅ "Hey, peux-tu me dire la météo à Paris, FR ?"
+
+❌ "Douala CM" → va afficher une erreur de format
+
+✅ "Bonjour" → va afficher une salutation
+

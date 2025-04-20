@@ -900,21 +900,45 @@ article.container::before {
 
     .highlight-card:nth-child(-n+2) {
       grid-column: span 2;
-      height: 160px;
+      /*height: 160px;*/
     }
 
     .highlight-card:nth-child(n+3) { height: 120px; }
 
     .highlights .m-icon { font-size: 3.6rem; }
 
-    .highlight-card.one .card-item {
-      width: 30%;
-      flex-direction: column-reverse;
-      justify-content: space-between;
-      display: flex;
-      margin-right: 30px;
-      overflow: hidden;
+      /* Ajustement de l'affichage vertical pour chaque polluant */
+      .highlight-card.one .card-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
       }
+      
+      .highlight-card.one .card-item {
+        width: 48%; /* ou 100% si tu veux 1 par ligne */
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        padding: 6px 4px;
+      }
+      
+      .highlight-card.one .label-1 {
+        /*font-size: 0.8rem;*/
+        color: var(--onyx);
+        margin-bottom: 4px;
+      }
+      
+      .highlight-card.one .title-1 {
+        --title-1: 3.6rem;;
+        font-weight: bold;
+        margin-top: 2px;
+      }
+      
+      
+
+
 
     
   
@@ -1072,7 +1096,7 @@ article.container::before {
 
     .forecast-card .title-2 { --title-2: 2.2rem; }
 
-    .highlight-card:nth-child(-n+2) { height: 200px; }
+    /*.highlight-card:nth-child(-n+2) { height: 200px; }*/
 
     .highlight-card:nth-child(n+3) { height: 150px; }
 
@@ -1450,60 +1474,101 @@ article.container::before {
     padding: 8px;
   }
 
+  
+
   .leaflet-control iframe {
     width: 240px !important;
     height: 150px !important;
   }
 
 }
+/* Icône du chatbot toujours visible */
+#chatbot-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-size: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+/* Fenêtre du chatbot */
 .chatbot-container {
   position: fixed;
-  bottom: 100px;
-  right: 30px;
+  top: 80px; /* juste sous l’icône */
+  right: 20px;
   width: 300px;
   max-height: 400px;
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  overflow-y: auto;
-  padding: 10px;
-  display: none;
-  flex-direction: column;
-  z-index: 1000;
-}
-
-.chatbot-container.active {
+  z-index: 9998;
   display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.user-message, .bot-message {
-  padding: 8px 12px;
-  margin: 5px 0;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.4;
+.hidden {
+  display: none !important;
 }
 
-.user-message {
-  background-color: #007bff;
+/* En-tête */
+.chatbot-header {
+  background: #007bff;
   color: white;
-  align-self: flex-end;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
-.bot-message {
-  background-color: #f1f1f1;
-  color: black;
-  align-self: flex-start;
-}
-
-.chatbot-container input {
-  margin-top: auto;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.chatbot-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
   font-size: 14px;
+}
+
+.chatbot-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.chatbot-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 0;
   outline: none;
 }
 
+.chatbot-input button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
 
+.user-message {
+  text-align: right;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.bot-message {
+  text-align: left;
+  margin-bottom: 8px;
+  color: #007bff;
+}

@@ -766,28 +766,6 @@ function displayMap(lat, lon) {
             });
 
 
-            
-
-
-  
-        // Écouteur pour lancer une recherche à l'entrée de la ville
-        setTimeout(() => {
-        const searchInput = document.getElementById('map-search');
-        if (searchInput) {
-            searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && searchInput.value) {
-                fetchData(url.geo(searchInput.value), function (locations) {
-                if (locations.length > 0) {
-                    const { lat, lon } = locations[0];
-                    updateWeather(lat, lon);
-                }
-                });
-            }
-            });
-        }
-        }, 500);
-
-
         const baseLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
             attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
             subdomains: 'abcd',
@@ -984,3 +962,4 @@ document.getElementById('chatbot-toggle').addEventListener('click', () => {
   const chatbot = document.getElementById('chatbot');
   chatbot.classList.toggle('active');
 });
+

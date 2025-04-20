@@ -52,14 +52,17 @@ window.addEventListener("hashchange", checkHash, { passive: true });
 
 window.addEventListener("load", () => {
     if (!window.location.hash) {
-        window.location.hash = "#/current-location";
+      // Par défaut, on ne déclenche pas la géolocalisation sans action utilisateur
+      window.location.hash = "#/weather?lat=51.5073219&lon=-0.1276474"; // London (ou autre ville par défaut)
     } else {
-        checkHash();
+      checkHash();
     }
-});
+  });
+  
+  
 
 // Ajoutez un bouton pour obtenir la localisation actuelle
-const locationBtn = document.querySelector('[data-get-location-btn]');
+const locationBtn = document.querySelector('[data-current-location-btn]');
 if (locationBtn) {
   locationBtn.addEventListener('click', currentLocation);
 }
