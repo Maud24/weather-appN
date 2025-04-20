@@ -9,6 +9,22 @@
 
 import { fetchData, url } from "./api.js";
 import * as module from "./module.js";
+import { getWeatherData } from "./api.js";
+
+
+// Exemple d'utilisation
+const exampleFunction = async () => {
+  const lat = 34.05; // Latitude pour Los Angeles
+  const lon = -118.25; // Longitude pour Los Angeles
+  try {
+      const weatherData = await getWeatherData(lat, lon);
+      console.log(weatherData);
+  } catch (error) {
+      console.error("Erreur lors de la récupération des données météo :", error);
+  }
+};
+
+exampleFunction();
 
 /**
  * Add event listener on multiple elements 
@@ -274,7 +290,6 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
     checkWeatherAlert(weatherData);
 });
 
-  
 
 
     /**
@@ -329,14 +344,6 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
             addToHistory(`${name}, ${country}`, lat, lon);
           });          
 
-        // Stockage des vraies données météo pour le chatbot
-        window.latestWeatherData = {
-          temperature: parseInt(currentWeather.main.temp),
-          feels_like: parseInt(currentWeather.main.feels_like),
-          description: currentWeather.weather[0].description,
-          location: currentWeather.name,
-          date: module.getDate(currentWeather.dt, currentWeather.timezone)
-        };
 
         currentWeatherSection.appendChild(card);
 
@@ -739,6 +746,7 @@ function displayMap(lat, lon) {
                     div.innerHTML = `
                     <iframe 
                         width="400" 
+                        title="Animation du vent - Windy"
                         height="300"
                         src="https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=400&height=300&zoom=7&level=surface&overlay=wind"
                         frameborder="0"
@@ -962,59 +970,6 @@ renderHistory();
 
 export const error404 = () => errorContent.style.display = "flex";
 
-// --- Gestion affichage du chatbot ---
-const toggleChatbot = document.getElementById('chatbot-toggle');
-const chatbotWindow = document.getElementById('chatbot-window');
-const closeChatbotBtn = document.getElementById('close-chatbot');
-
-toggleChatbot.addEventListener('click', () => {
-  chatbotWindow.classList.toggle('hidden');
-});
-
-closeChatbotBtn.addEventListener('click', () => {
-  chatbotWindow.classList.add('hidden');
-});
-
-// --- Fonctionnement du chatbot ---
-const sendBtn = document.getElementById("send-chat");
-const inputField = document.getElementById("chat-input");
-const messagesContainer = document.getElementById("chat-messages");
-
-sendBtn.addEventListener("click", handleChat);
-inputField.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") handleChat();
-});
-
-function handleChat() {
-  const userInput = inputField.value.trim();
-  if (!userInput) return;
-
-  // Afficher question utilisateur
-  messagesContainer.innerHTML += `<div><strong>👤 Toi:</strong> ${userInput}</div>`;
-  inputField.value = "";
-
-  // Obtenir les données météo depuis ton code existant
-  const weather = window.latestWeatherData; // <- tu devrais stocker tes données dans ce global
-
-  // Réponse simple basée sur les données
-  let response = "Désolé, je n’ai pas compris.";
-
-if (weather) {
-  if (userInput.includes("temps") || userInput.includes("météo")) {
-    response = `Actuellement à ${weather.location}, il fait ${weather.temperature}°C avec ${weather.description}.`;
-  } else if (userInput.includes("parapluie") || userInput.includes("pluie")) {
-    if (weather.description.toLowerCase().includes("pluie")) {
-      response = "Oui, il pleut actuellement. Pense à prendre un parapluie ☔";
-    } else {
-      response = "Pas de pluie prévue pour l’instant 🌤️";
-    }
-  }
-}
-
-  messagesContainer.innerHTML += `<div><strong>🤖 Bot:</strong> ${response}</div>`;
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -1023,3 +978,9 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Erreur lors de l'enregistrement du Service Worker :", err));
   });
 }
+
+
+document.getElementById('chatbot-toggle').addEventListener('click', () => {
+  const chatbot = document.getElementById('chatbot');
+  chatbot.classList.toggle('active');
+});

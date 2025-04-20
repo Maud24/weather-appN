@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WeathApp</title>
   <meta name="title" content="Weather App" />
@@ -24,7 +23,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.css" />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="./assets/css/Style.css" />
+  <link rel="stylesheet" href="./assets/css/Style.css?v=1.0" />
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,10 +32,11 @@
   <link rel="manifest" href="./assets/manifest.webmanifest" />
   
 
+  <link rel="preload" href="./assets/font/material-symbol-rounded.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
   
   <!-- iOS Support -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="WeathApp" />
   <link rel="apple-touch-icon" href="./assets/images/app-icon.jpg" />
@@ -56,9 +56,9 @@
 
       <div class="search-view" data-search-view>
         <div class="search-wrapper">
-          <input type="search" name="search" placeholder="Rechercher une ville..." autocomplete="off" class="search-field" data-search-field />
+          <input type="search" name="search" id="search-input" placeholder="Rechercher une ville..." autocomplete="off" class="search-field" data-search-field />
           <span class="m-icon leading-icon">search</span>
-          <button type="button" class="icon-btn leading-icon has-state" aria-label="close search" data-search-toggler>
+          <button type="button" class="icon-btn leading-icon has-state" title="recherche1" aria-label="close search" data-search-toggler>
             <span class="m-icon">arrow_back</span>
           </button>
         </div>
@@ -66,7 +66,7 @@
       </div>
 
       <div class="header-actions">
-        <button class="icon-btn has-state" type="button" aria-label="open search" data-search-toggler>
+        <button class="icon-btn has-state" type="button" title="recherche2" aria-label="open search" data-search-toggler>
           <span class="m-icon">search</span>
         </button>
         <a href="#/current-location" class="btn-primary has-state" data-current-location-btn>
@@ -74,15 +74,10 @@
           <span class="span">Ma position</span>
         </a>
 
-        
+        <!-- Icône du chatbot -->
+        <button id="chatbot-toggle" class="icon-btn has-state" aria-label="Ouvrir le chatbot" type="button" title="Ouvrir le Chatbot">💬</button>
       </div>
 
-     <!-- Icône du chatbot dans les actions de header -->
-      <div class="chatbot-toggle-wrapper">
-        <button type="button" id="chatbot-toggle" class="icon-btn chatbot-btn" aria-label="Ouvrir le chatbot">💬</button>
-      </div>
-
-    </div>
  
   </header>
 
@@ -121,6 +116,7 @@
             <canvas id="temperatureChart" width="100%" height="200"></canvas>
           </section>
           
+        
 
         <!-- Footer -->
         <footer class="footer">
@@ -150,29 +146,28 @@
 
   
    <!-- Modal d'alerte météo -->
-   <div class="alert-modal" id="alertModal">
+  <div class="alert-modal" id="alertModal">
     <div class="alert-content">
         <span class="close-btn" id="closeAlertBtn">&times;</span>
         <h3>Alerte Météo</h3>
         <p id="alertMessage">Il pleut dans votre ville, prenez un parapluie !</p>
     </div>
-    </div>
+  </div>
     
-
-    <!-- Fenêtre de Chatbot -->
-<div id="chatbot-window" class="chatbot hidden">
-  <div class="chatbot-header">
-    <span>🤖 Chat météo</span>
-    <button id="close-chatbot" type="button">✖</button>
+  <!-- Fenêtre de Chatbot -->
+  <div id="chatbot" class="chatbot-container hidden">
+    <div class="chatbot-header">
+      <span>🤖 Chat météo</span>
+      <button id="close-chatbot" type="button">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chat-messages"></div>
+    <div class="chatbot-input">
+      <input type="text" id="chat-input" name="chat" placeholder="Pose ta question..." />
+      <button id="send-chat" title="envoyer" aria-label="envoyer" type="button">Envoyer</button>
+    </div>
   </div>
-  <div class="chatbot-messages" id="chat-messages"></div>
-  <div class="chatbot-input">
-    <input type="text" id="chat-input" placeholder="Pose ta question..." />
-    <button id="send-chat" type="button">Envoyer</button>
-  </div>
-</div>
 
- 
+  
    <!-- JS -->
    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
    <script src="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
@@ -180,6 +175,8 @@
    <script src="./assets/js/App1.js" type="module"></script>
    <script src="./assets/js/route.js" type="module"></script>
  
+  <!-- Script pour le Chatbot -->
+  <script src="./assets/js/chatbot.js" type="module"></script>
  
   
 </body>

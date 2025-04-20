@@ -38,5 +38,21 @@ export const url = {
     }
 };
 
+export const getWeatherData = async (lat, lon) => {
+    const endpoint = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api_key}`;
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error("Erreur API météo");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données météo :", error);
+      return null;
+    }
+  };
+  
+
+
+
 
 

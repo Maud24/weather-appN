@@ -1,4 +1,5 @@
 const cacheName = "weathapp-cache-v1";
+
 const assets = [
   "./",
   "./index.html",
@@ -6,36 +7,50 @@ const assets = [
   "./assets/js/App1.js",
   "./assets/js/module.js",
   "./assets/js/route.js",
+  "./assets/js/chatbot.js", // Ajoute ce fichier s'il existe
   "./assets/images/logoWeather.PNG",
   "./assets/images/openweather.png",
-  "./assets/manifest.webmanifest", // ← corriger l'extension ici
+  "./assets/images/weather_icons/04n.png",
+  "./assets/images/weather_icons/04d.png",
+  "./assets/manifest.webmanifest",
   "https://unpkg.com/leaflet/dist/leaflet.css",
   "https://unpkg.com/leaflet/dist/leaflet.js"
 ];
 
-// Installation du service worker
+// INSTALLATION
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheName).then((cache) => {
-      return cache.addAll(assets);
+      return Promise.all(
+        assets.map((url) =>
+          fetch(url)
+            .then((response) => {
+              if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+              return cache.put(url, response);
+            })
+            .catch((err) => {
+              console.warn(`[SW] Asset not cached: ${url}`, err);
+            })
+        )
+      );
     })
   );
-  self.skipWaiting(); // active immédiatement
+  self.skipWaiting();
 });
 
-// Activation
+// ACTIVATION
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.filter((key) => key !== cacheName).map((key) => caches.delete(key)))
     )
   );
-  self.clients.claim(); // prendre le contrôle immédiatement
+  self.clients.claim();
 });
 
-// Interception des requêtes
+// FETCH
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
+    caches.match(event.request).then((res) => res || fetch(event.request))
   );
 });
