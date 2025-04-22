@@ -7,7 +7,7 @@ const assets = [
   "./assets/js/App1.js",
   "./assets/js/module.js",
   "./assets/js/route.js",
-  "./assets/js/chatbot.js", // Ajoute ce fichier s'il existe
+  "./assets/js/assist-meteo.js",
   "./assets/images/logoWeather.PNG",
   "./assets/images/openweather.png",
   "./assets/images/weather_icons/04n.png",
