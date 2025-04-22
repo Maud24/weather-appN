@@ -1,15 +1,20 @@
- /**
+/**
  * @license MIT
- * @copyright codewithsadee 2023 All rights reserved
- * @author codewithsadee <mohammadsadee24@gmail.com>
+ * @fileoverview Menage all routes
+ * @copyright Maud24 2025 All rights reserved
+ * @author Maud24 <ondiguimarine@gmail.com>
  */
 
+
+ let isLoadingWeather = false; // Déclaration en haut du fichier
+ 
 
 'use strict'
 
 import { fetchData, url } from "./api.js";
 import * as module from "./module.js";
 import { getWeatherData } from "./api.js";
+
 
 
 // Exemple d'utilisation
@@ -111,7 +116,6 @@ searchField.addEventListener("input", function () {
     }
 
 });
-
 
 const container = document.querySelector("[data-container]");
 const loading = document.querySelector("[data-loading]");
@@ -217,7 +221,9 @@ function addToHistory(name, lat, lon) {
  * @param {number} lat Latitude
  * @param {number} lon Longitude
  */
-export const updateWeather = function (lat, lon) { 
+export const updateWeather = function (lat, lon) {
+  if (isLoadingWeather) return; // Éviter les appels multiples
+    isLoadingWeather = true; // Marquer comme en cours de chargement
 
     loading.style.display = "grid";
     container.style.overflowY = "hidden";
@@ -273,7 +279,11 @@ function showAlert(message, type = 'warning') {
     closeButton.addEventListener('click', function() {
         alertModal.style.display = 'none';
     });
+
+    
 }
+
+
 
 // Fonction pour vérifier les alertes et afficher l'alerte
 function checkWeatherAlert(weatherData) {
@@ -285,10 +295,6 @@ function checkWeatherAlert(weatherData) {
     }
 }
 
-// Exemple d'appel après récupération des données météo
-fetchData(url.currentWeather(lat, lon), function(weatherData) {
-    checkWeatherAlert(weatherData);
-});
 
 
 
@@ -297,56 +303,71 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
      */
     //recuperation des donnees
     fetchData(url.currentWeather(lat, lon), function (currentWeather) {
-        const {
-            weather,
-            dt: dateUnix,
-            sys: { sunrise: sunriseUnixUTC, sunset: sunsetUnixUTC },
-            main: { temp, feels_like, pressure, humidity },
-            visibility,
-            timezone
-        } = currentWeather
-        const [{ description, icon }] = weather;
 
-        const card = document.createElement("div");
-        card.classList.add("card", "card-lg", "current-weather-card");
-
-        card.innerHTML = `
-            <h2 class="title-2 card-title">Météo actuelle</h2>
-
-                            <div class="weapper">
-                                <p class="heading">${parseInt(temp)}&deg;<sup>c</sup></p>
-
-                                <img src="./assets/images/weather_icons/${icon}.png" width="64" height="64" alt="${description}" class="weather-icon">
-                            </div>
-
-                            <p class="body-3">${description}</p>
-
-                            <ul class="meta-list">
-
-                                <li class="meta-item">
-                                    <span class="m-icon">calendar_today</span>
-
-                                    <p class="title-3 meta-text">${module.getDate(dateUnix, timezone)}</p>
-                                </li>
-
-                                <li class="meta-item">
-                                    <span class="m-icon">location_on</span>
-
-                                    <p class="title-3 meta-text" data-location></p>
-                                </li>
-
-                            
-                            </ul>
-        `;
-
-        fetchData(url.reverseGeo(lat, lon), function([{ name, country }]) {
-            card.querySelector("[data-location]").innerHTML = `${name}, ${country}`;
-            addToHistory(`${name}, ${country}`, lat, lon);
-          });          
-
-
-        currentWeatherSection.appendChild(card);
-
+      checkWeatherAlert(currentWeather); // <- Appel déplacé ici pour éviter doublon
+  
+      const {
+          weather,
+          dt: dateUnix,
+          sys: { sunrise: sunriseUnixUTC, sunset: sunsetUnixUTC },
+          main: { temp, feels_like, pressure, humidity },
+          visibility,
+          timezone
+      } = currentWeather;
+  
+      const [{ description, icon }] = weather;
+  
+      const card = document.createElement("div");
+      card.classList.add("card", "card-lg", "current-weather-card");
+  
+      card.innerHTML = `
+          <h2 class="title-2 card-title">Météo actuelle</h2>
+          <div class="weapper">
+              <p class="heading">${parseInt(temp)}&deg;<sup>c</sup></p>
+              <img src="./assets/images/weather_icons/${icon}.png" width="64" height="64" alt="${description}" class="weather-icon">
+          </div>
+          <p class="body-3">${description}</p>
+          <ul class="meta-list">
+              <li class="meta-item">
+                  <span class="m-icon">calendar_today</span>
+                  <p class="title-3 meta-text">${module.getDate(dateUnix, timezone)}</p>
+              </li>
+              <li class="meta-item">
+                  <span class="m-icon">location_on</span>
+                  <p class="title-3 meta-text" data-location></p>
+              </li>
+          </ul>
+      `;
+      function showRainOverlay() {
+        removeRainOverlay(); // au cas où
+      
+        const overlay = document.createElement('div');
+        overlay.className = 'rain-overlay';
+        overlay.id = 'rain-overlay';
+      
+        for (let i = 0; i < 100; i++) {
+          const drop = document.createElement('div');
+          drop.className = 'rain-drop';
+          drop.style.left = `${Math.random() * 100}%`;
+          drop.style.animationDelay = `${Math.random()}s`;
+          overlay.appendChild(drop);
+        }
+      
+        document.getElementById('map').appendChild(overlay);
+      }
+      
+      function removeRainOverlay() {
+        const oldOverlay = document.getElementById('rain-overlay');
+        if (oldOverlay) oldOverlay.remove();
+      }
+  
+      fetchData(url.reverseGeo(lat, lon), function([{ name, country }]) {
+          card.querySelector("[data-location]").innerHTML = `${name}, ${country}`;
+          addToHistory(`${name}, ${country}`, lat, lon);
+      });
+  
+      currentWeatherSection.appendChild(card);
+  
         /**
          * TODAY'S HIGHLIGHTS
          */
@@ -520,7 +541,6 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
                         <ul class="slider-list" data-wind></ul>
                     </div>
             `;
-            
 
         for (const [index, data] of forecastList.entries()) {
             if(index > 7) break;
@@ -566,8 +586,6 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
                 </div>
             `;
             hourlySection.querySelector("[data-wind]").appendChild(windLi);
-
-
         }
 
         // --- Graphique de température sur 24h ---
@@ -621,7 +639,6 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
         }
         });
 
-        
                 /**
          * 5 DAY FORECAST SECTION
          */
@@ -674,12 +691,11 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
               `;
               forecastListContainer.appendChild(li);
             });
-    
-
 
         loading.style.display = "none";
         container.style.overflowY = "overlay";
         container.classList.add("fade-in");
+        isLoadingWeather = false;
 
         renderTempChart(forecastList, timezone);
 
@@ -690,8 +706,10 @@ fetchData(url.currentWeather(lat, lon), function(weatherData) {
 
     });
 
+    
 
 }
+
 
 
 const api_key = "4e961e64c39ef786890e2a72153035ef";
@@ -845,6 +863,7 @@ function displayMap(lat, lon) {
             .setLatLng(e.latlng)
             .setContent(popupContent)
             .openOn(map);
+            
         });
       });
   
@@ -941,6 +960,8 @@ function displayMap(lat, lon) {
 
     
   }
+
+
   
 
 // Charger l'historique au chargement initial
@@ -962,4 +983,3 @@ document.getElementById('chatbot-toggle').addEventListener('click', () => {
   const chatbot = document.getElementById('chatbot');
   chatbot.classList.toggle('active');
 });
-

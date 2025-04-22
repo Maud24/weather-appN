@@ -38,6 +38,12 @@ export const url = {
     }
 };
 
+ /**
+ * Obtenir les données météo actuelles avec async/await
+ * @param {number} lat
+ * @param {number} lon
+ * @returns {Promise<Object|null>}
+ */
 export const getWeatherData = async (lat, lon) => {
     const endpoint = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api_key}`;
     try {
@@ -51,8 +57,3 @@ export const getWeatherData = async (lat, lon) => {
     }
   };
   
-
-
-
-
-

@@ -2,14 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <base href="/weather-appN/" />
+  <!--<base href="/weather-appN/" />-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WeathApp</title>
   <meta name="title" content="Weather App" />
   <meta name="description" content="This weather app gives us weather predictions for different cities" />
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,23 +24,39 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.css" />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="assets/css/Style.css?v=1.0" />
+  <link rel="stylesheet" href="./assets/css/Style.css?v=1.0" />
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log("✅ Service Worker enregistré"))
+      .catch(err => console.error("❌ SW non enregistré", err));
+    
+    Notification.requestPermission().then(permission => {
+      console.log("🔔 Permission Notification :", permission);
+    });
+  }
+</script>
+
+
+
   <!-- PWA Meta -->
-  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="manifest" href="./manifest.webmanifest" />
   
 
-  <link rel="preload" href="assets/font/material-symbol-rounded.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+  <link rel="preload" href="./assets/font/material-symbol-rounded.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
   
   <!-- iOS Support -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="WeathApp" />
-  <link rel="apple-touch-icon" href="assets/images/app-icon.jpg" />
+  <link rel="apple-touch-icon" href="./assets/images/app-icon.jpg" />
 
 
 
@@ -52,7 +68,7 @@
 
     <div class="container">
       <a href="#" class="logo">
-        <img src="assets/images/logoWeather.PNG" width="200" height="58" alt="logo" />
+        <img src="./assets/images/logoWeather.PNG" width="200" height="58" alt="logo" />
       </a>
 
       <div class="search-view" data-search-view>
@@ -107,6 +123,7 @@
           <h2 class="title-2">Carte Météo</h2>
           <div id="map"></div>
         </section>
+    
 
         <section class="section highlights" aria-labelledby="highlights-label" data-highlights></section>
 
@@ -125,7 +142,7 @@
           <p class="body-3">
             Powered By
             <a href="https://openweathermap.org/api" title="Free OpenWeather API" target="_blank" rel="noopener">
-              <img src="assets/images/openweather.png" width="150" height="30" loading="lazy" alt="OpenWeather" />
+              <img src="./assets/images/openweather.png" width="150" height="30" loading="lazy" alt="OpenWeather" />
             </a>
           </p>
         </footer>
@@ -155,8 +172,8 @@
     </div>
   </div>
     
-  <!-- Fenêtre de Chatbot -->
-  <div id="chatbot" class="chatbot-container hidden">
+   <!-- Fenêtre de Chatbot -->
+   <div id="chatbot" class="chatbot-container hidden">
     <div class="chatbot-header">
       <span>🤖 Chat météo</span>
       <button id="close-chatbot" type="button">✖</button>
@@ -173,12 +190,18 @@
    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
    <script src="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
    <script src="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.js"></script>
-   <script src="assets/js/App1.js" type="module"></script>
-   <script src="assets/js/route.js" type="module"></script>
+   <script src="./assets/js/App1.js" type="module"></script>
+   <script src="./assets/js/route.js" type="module"></script>
  
-  <!-- Script pour le Chatbot -->
-  <script src="assets/js/chatbot.js" type="module"></script>
- 
+   <script src="./assets/js/assist-meteo.js" type="module"></script>
+
+   <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+   <script>
+    function toggleTheme() {
+      document.body.dataset.theme = document.body.dataset.theme === "light" ? "" : "light";
+    }
+  </script>
   
+
 </body>
 </html>

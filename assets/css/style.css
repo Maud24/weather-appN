@@ -49,6 +49,7 @@
 --gradient-2: linear-gradient(180deg, hsla(260, 5%, 12%, 0) 0%, hsla(260, 5%, 12%, 0.8) 65%, hsl(260, 5%, 12%) 100%);
 
 
+
 /**
 * TYPOGRAPHY
 */
@@ -94,6 +95,77 @@
 }
 
 
+/* === AJOUT DARK/LIGHT MODE === */
+:root {
+  --light-background: #dcc6c6;
+  --light-on-background: #1a1a1a;
+  --light-surface: #ede0e0;
+  --light-on-surface: #333333;
+}
+
+body[data-theme="light"] {
+  background-color: var(--light-background);
+  color: var(--light-on-background);
+}
+
+body[data-theme="light"] .card {
+  background-color: var(--light-surface);
+  color: var(--light-on-surface);
+}
+
+body[data-theme="light"] .btn-primary {
+  background-color: #333333;
+  color: #fff;
+}
+body[data-theme="light"] .search-field {
+  color: white;
+}
+
+body[data-theme="light"] .search-field::placeholder {
+  color: white; /* couleur plus douce pour l'indice de saisie */
+}
+
+
+body[data-theme="light"] .chatbot-container,
+body[data-theme="light"] .footer,
+body[data-theme="light"] .header
+body[data-theme="light"] .highlight-card {
+  background-color: var(--light-surface);
+  color: var(--light-on-surface);
+}
+/* Icône (loupe) de la barre de recherche en blanc */
+body[data-theme="light"] .search-wrapper .m-icon {
+  color: white;
+}
+
+/* Résultats de ville en blanc */
+body[data-theme="light"] .search-view .view-item {
+  color: white;
+}
+
+/* Petits textes en dessous des villes (souvent item-subtitle) en rouge */
+body[data-theme="light"] .search-view .view-item .item-subtitle {
+  color: rgb(101, 36, 36);
+}
+
+/* === BOUTON DE TOGGLE === */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
 
 /*-----------------------------------*\
   #RESET
@@ -1571,4 +1643,58 @@ article.container::before {
   text-align: left;
   margin-bottom: 8px;
   color: #007bff;
+}
+
+.prediction-tomorrow {
+  background-color: #2b527b;
+  border-left: 4px solid #007bff;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 1rem;
+}
+
+.font-size {
+  font-size: 15px;
+  padding: 10px;
+  background-color: #e9f6ff;
+  border-left: 4px solid #007bff;
+  border-radius: 5px;
+  color: #333;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* 🌧️ Animation gouttes de pluie */
+.rain-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.6);
+  animation: fall 0.7s linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
 }
