@@ -12,7 +12,7 @@ const assets = [
   "./assets/images/openweather.png",
   "./assets/images/weather_icons/04n.png",
   "./assets/images/weather_icons/04d.png",
-  "./manifest.webmanifest",
+  "/manifest.webmanifest",
   "https://unpkg.com/leaflet/dist/leaflet.css",
   "https://unpkg.com/leaflet/dist/leaflet.js"
 ];
