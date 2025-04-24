@@ -3,13 +3,11 @@
   "short_name": "Météo",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#007bff",
-  "theme_color": "#007bff",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./assets/images/weather_icons/app-icon.jpg",
-      "sizes": "225x225",
+      "src": "./assets/images/weather_icons/meteo.png",
+      "sizes": "2400x2400",
       "type": "image/jpg"
     }
   ]
