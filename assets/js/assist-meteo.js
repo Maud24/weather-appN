@@ -149,7 +149,7 @@ async function handleChat() {
 
     const isTemp = /température|chaud|froid|ressenti|brulant|glacial|chaude/.test(cleaned);
     const isHumid = /humidité|humidite|moite|Taux d'humidite/.test(cleaned);
-    const isRain = /pleut|pluie|pleuvoir|averse|va-t-il pleuvoir/.test(cleaned);
+    const isRain = /pleut|pluie|pleuvoir|averse|va-t-il pleuvoir|il pleut/.test(cleaned);
     const isWind = /vent|souffle|rafale|ouragan/.test(cleaned);
     const isGeneral = /meteo|temps|climat|il fait|quel temps|fait-il|va t-il|donne moi la meteo|y'aura|Il va|Donne moi|Puis-je avoir|Quel est/.test(cleaned) || (!isTemp && !isHumid && !isWind && !isRain);
 

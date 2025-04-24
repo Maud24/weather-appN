@@ -5,17 +5,13 @@
  * @author Maud24 <ondiguimarine@gmail.com>
  */
 
-
  let isLoadingWeather = false; // Déclaration en haut du fichier
  
-
 'use strict'
 
 import { fetchData, url } from "./api.js";
 import * as module from "./module.js";
 import { getWeatherData } from "./api.js";
-
-
 
 // Exemple d'utilisation
 const exampleFunction = async () => {
@@ -28,7 +24,6 @@ const exampleFunction = async () => {
       console.error("Erreur lors de la récupération des données météo :", error);
   }
 };
-
 exampleFunction();
 
 /**
@@ -121,7 +116,6 @@ const container = document.querySelector("[data-container]");
 const loading = document.querySelector("[data-loading]");
 const errorContent = document.querySelector("[data-error-content]");
 
-
 function addToHistory(name, lat, lon) {
     const historyList = JSON.parse(localStorage.getItem("weatherSearchHistory")) || [];
     const newEntry = { name, lat, lon };
@@ -213,8 +207,6 @@ function addToHistory(name, lat, lon) {
     });
   }
  
-
-
 /**
  * Render all weather data in html page
  * 
@@ -251,8 +243,8 @@ export const updateWeather = function (lat, lon) {
             currentLocationBtn.removeAttribute("disabled");
         }
       }
-      
-      
+
+            
       // Fonction pour afficher l'alerte
   // Fonction pour afficher la modale d'alerte
 function showAlert(message, type = 'warning') {
@@ -269,7 +261,6 @@ function showAlert(message, type = 'warning') {
         alertIcon = '⚠️'; // Emoji d'alerte générique
         alertContent.querySelector('h3').innerHTML = `${alertIcon} Alerte Météo !`;
     }
-
     alertContent.querySelector('p').textContent = message;
 
     // Afficher la modale
@@ -278,12 +269,8 @@ function showAlert(message, type = 'warning') {
     // Fermer la modale lorsque la croix est cliquée
     closeButton.addEventListener('click', function() {
         alertModal.style.display = 'none';
-    });
-
-    
+    });    
 }
-
-
 
 // Fonction pour vérifier les alertes et afficher l'alerte
 function checkWeatherAlert(weatherData) {
@@ -295,14 +282,21 @@ function checkWeatherAlert(weatherData) {
     }
 }
 
-
-
-
     /**
      * CURRENT WEATHER SECTION
      */
     //recuperation des donnees
     fetchData(url.currentWeather(lat, lon), function (currentWeather) {
+
+      
+      // Vérifie s’il pleut pour afficher le GIF
+      const rainGif = document.getElementById("rain-overlay");
+      const weatherDesc = currentWeather.weather[0].description.toLowerCase();
+      if (weatherDesc.includes("rain") || weatherDesc.includes("shower") || weatherDesc.includes("drizzle") || weatherDesc.includes("storm") || weatherDesc.includes("orage")) {
+        rainGif.style.display = "block";
+      } else {
+        rainGif.style.display = "none";
+      }
 
       checkWeatherAlert(currentWeather); // <- Appel déplacé ici pour éviter doublon
   
@@ -315,8 +309,8 @@ function checkWeatherAlert(weatherData) {
           timezone
       } = currentWeather;
   
-      const [{ description, icon }] = weather;
-  
+      const [{ description, icon }] = weather;      
+
       const card = document.createElement("div");
       card.classList.add("card", "card-lg", "current-weather-card");
   
@@ -337,35 +331,11 @@ function checkWeatherAlert(weatherData) {
                   <p class="title-3 meta-text" data-location></p>
               </li>
           </ul>
-      `;
-      function showRainOverlay() {
-        removeRainOverlay(); // au cas où
-      
-        const overlay = document.createElement('div');
-        overlay.className = 'rain-overlay';
-        overlay.id = 'rain-overlay';
-      
-        for (let i = 0; i < 100; i++) {
-          const drop = document.createElement('div');
-          drop.className = 'rain-drop';
-          drop.style.left = `${Math.random() * 100}%`;
-          drop.style.animationDelay = `${Math.random()}s`;
-          overlay.appendChild(drop);
-        }
-      
-        document.getElementById('map').appendChild(overlay);
-      }
-      
-      function removeRainOverlay() {
-        const oldOverlay = document.getElementById('rain-overlay');
-        if (oldOverlay) oldOverlay.remove();
-      }
-  
+      `;      
       fetchData(url.reverseGeo(lat, lon), function([{ name, country }]) {
           card.querySelector("[data-location]").innerHTML = `${name}, ${country}`;
           addToHistory(`${name}, ${country}`, lat, lon);
       });
-  
       currentWeatherSection.appendChild(card);
   
         /**
@@ -380,7 +350,6 @@ function checkWeatherAlert(weatherData) {
 
             const card = document.createElement("div");
             card.classList.add("card", "card-lg");
-
             card.innerHTML = `
             
                         <h2 class="title-2" id="highlights-label">Points forts d'aujourd'hui</h2>
@@ -431,7 +400,6 @@ function checkWeatherAlert(weatherData) {
 
                             </div>
 
-
                             <div class="card card-sm highlight-card two">
 
                                 <h3 class="title-3">Levée et couchée de soleil</h3>
@@ -457,10 +425,8 @@ function checkWeatherAlert(weatherData) {
                                         <p class="title-1">${module.getTime(sunsetUnixUTC, timezone)}</p>
                                         </div>
                                     </div>
-
                                 
                                 </div>
-
                             </div>
 
                             <div class="card-sm highlight-card">
@@ -487,8 +453,7 @@ function checkWeatherAlert(weatherData) {
                                 </div>
 
                             </div>
-                            
-                            
+                                                        
                             <div class="card-sm highlight-card">
 
                                 <h3 class="title-3">Visibilité</h3>
@@ -499,7 +464,6 @@ function checkWeatherAlert(weatherData) {
                                 </div>
 
                             </div>
-
 
                             <div class="card-sm highlight-card">
 
@@ -515,12 +479,9 @@ function checkWeatherAlert(weatherData) {
 
                         </div>
             `;
-
-
             highlightSection.appendChild(card);
 
         });
-
 
         /**
          * 24H FORECAST SECTION
@@ -676,7 +637,6 @@ function checkWeatherAlert(weatherData) {
             const icon = icons[0];
             const desc = descriptions[0];
             const date = new Date(dateStr);
-
     
               const li = document.createElement("li");
               li.classList.add("card-item");
@@ -702,15 +662,8 @@ function checkWeatherAlert(weatherData) {
         displayMap(lat, lon);
 
         });
-
-
     });
-
-    
-
 }
-
-
 
 const api_key = "4e961e64c39ef786890e2a72153035ef";
 
@@ -720,8 +673,9 @@ let weatherMask;
 let miniMap;
 // 1. Ajouter le toggle "Animation du vent"
 
-
 function displayMap(lat, lon) {
+  updateRainOverlay(lat, lon);
+
     const apiKey = "4e961e64c39ef786890e2a72153035ef";
   
     if (!map) {
@@ -783,7 +737,6 @@ function displayMap(lat, lon) {
             }
             });
 
-
         const baseLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
             attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
             subdomains: 'abcd',
@@ -812,7 +765,6 @@ function displayMap(lat, lon) {
     L.control.layers(null, weatherLayers, { collapsed: false }).addTo(map);
 
     let windyOverlay = null;
-
 
     // Activer une couche par défaut si tu veux (par exemple pluie)
       weatherLayers["Pluie"].addTo(map);
@@ -865,6 +817,7 @@ function displayMap(lat, lon) {
             .openOn(map);
             
         });
+
       });
   
       // Minimap
@@ -919,8 +872,6 @@ function displayMap(lat, lon) {
         }
       });
       
-
-  
     } else {
       map.setView([lat, lon], 10);
       marker.setLatLng([lat, lon]);
@@ -957,18 +908,49 @@ function displayMap(lat, lon) {
         });
         }
         }, 500);
+        let rainOverlay = null;
 
-    
+        async function updateRainOverlay(lat, lon) {
+          // Récupère les données météo actuelles
+          try {
+            const weather = await getWeatherData(lat, lon);
+            const condition = weather.weather[0].main.toLowerCase(); // ex: "Rain", "Clouds"
+        
+            if (condition.includes("rain") || condition.includes("drizzle")) {
+              if (!rainOverlay) {
+                const RainLayer = L.Control.extend({
+                  onAdd: function () {
+                    const img = L.DomUtil.create("img");
+                    img.src = "./assets/images/rain-overlay.gif";
+                    img.style.position = "absolute";
+                    img.style.top = 0;
+                    img.style.left = 0;
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.pointerEvents = "none";
+                    img.style.zIndex = 400;
+                    return img;
+                  }
+                });
+                rainOverlay = new RainLayer({ position: "topright" });
+                rainOverlay.addTo(map);
+              }
+            } else {
+              if (rainOverlay) {
+                map.removeControl(rainOverlay);
+                rainOverlay = null;
+              }
+            }
+          } catch (err) {
+            console.error("❌ Erreur mise à jour pluie : ", err);
+          }
+        }
   }
-
-
-  
 
 // Charger l'historique au chargement initial
 renderHistory();
 
 export const error404 = () => errorContent.style.display = "flex";
-
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -977,7 +959,6 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Erreur lors de l'enregistrement du Service Worker :", err));
   });
 }
-
 
 document.getElementById('chatbot-toggle').addEventListener('click', () => {
   const chatbot = document.getElementById('chatbot');
