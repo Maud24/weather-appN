@@ -76,8 +76,6 @@ MIT
 
 ## À venir (Roadmap)
 
-Ajout d’un mode sombre
-
-Prévisions météo horaires sur 7 jours
-
-Machine Learning
+-Interface utilisateur inscrit et connecté
+-Prévisions météo horaires, hebdomadaires sur 7 jours
+-Entrainement d'un modèle de prédiction météo
