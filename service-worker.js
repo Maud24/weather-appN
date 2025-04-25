@@ -3,6 +3,9 @@ const cacheName = "weathapp-cache-v1";
 const assets = [
   "./",
   "./index.html",
+  "./connexion.html",
+  "./inscription.html",
+  "./vercel.json",
   "./assets/css/Style.css",
   "./assets/js/App1.js",
   "./assets/js/module.js",

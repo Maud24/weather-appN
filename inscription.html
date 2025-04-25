@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription - WeathApp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-container p {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #6c63ff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .icon {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+  </style>
+  <script>
+    function redirigerVersConnexion(event) {
+      event.preventDefault();
+      alert("🎉 Compte créé avec succès ! Redirection...");
+      window.location.href = 'connexion.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="form-container">
+    <div class="icon">🌤️</div>
+    <h2>Créer un compte</h2>
+    <p>Rejoins la communauté WeathApp et reste informé !</p>
+    <form onsubmit="redirigerVersConnexion(event)">
+      <input type="text" placeholder="Nom complet" required>
+      <input type="email" placeholder="Adresse e-mail" required>
+      <input type="password" placeholder="Mot de passe" required>
+      <button type="submit">Créer</button>
+    </form>
+  </div>
+
+  
+</body>
+</html>

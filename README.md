@@ -23,13 +23,20 @@ WeatherIO est une application météo complète, interactive et moderne, conçue
 
 ## ✨ Fonctionnalités principales
 
-- 🔎 Recherche de villes en temps réel
-- 🌍 Carte interactive avec couches météo (pluie, vent, température, nuages)
-- 📊 Graphiques des températures sur 24h et sur 5 jours
+- 🔎 Recherche de villes en temps réel avec l'API OpenWeatherMap
+- 📡Prévisions météo sur 5 jours
 - 📡 Prévisions météo détaillées (jour et heure)
-- 🌬️ Animation du vent (type Windy)
+- 🌍 Carte interactive avec couches météo (pluie, vent, température, nuages) et recherche de villes intégrée
+- Détails météo (Humidité, qualité de l'air, pressions, visibilité, ressentie,...)
+- 📊 Graphiques des températures sur 24h et sur 5 jours
+- 🌬️ Historiques de recherches
 - 📢 Système d’alertes météo (pluie, orages, etc.)
+- Tableau de bord pour ajout de lieux favoris
+- Thème sombre/clair adapté aux éléments de la page
 - 🤖 Chatbot intelligent pour interroger la météo en langage naturel
+- Page de connexion et inscription pour améliorations futures
+- Redirection à la position actuelle
+- Alertes en cas de pluie/orage dans une ville avec notification et gif sur la carte
 - 🖥️ Installation possible comme application (PWA)
 
 ---

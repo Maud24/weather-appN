@@ -288,15 +288,52 @@ function checkWeatherAlert(weatherData) {
     //recuperation des donnees
     fetchData(url.currentWeather(lat, lon), function (currentWeather) {
 
+      updateRainOverlay(lat, lon);
       
-      // Vérifie s’il pleut pour afficher le GIF
-      const rainGif = document.getElementById("rain-overlay");
-      const weatherDesc = currentWeather.weather[0].description.toLowerCase();
-      if (weatherDesc.includes("rain") || weatherDesc.includes("shower") || weatherDesc.includes("drizzle") || weatherDesc.includes("storm") || weatherDesc.includes("orage")) {
-        rainGif.style.display = "block";
-      } else {
-        rainGif.style.display = "none";
+      // 🔁 1. AJOUTE CE BLOC AVANT SON UTILISATION
+let rainOverlay = null;
+
+async function updateRainOverlay(lat, lon) {
+  try {
+    const weather = await getWeatherData(lat, lon);
+    const condition = weather.weather[0].main.toLowerCase();
+
+    if (
+      condition.includes("rain") ||
+      condition.includes("drizzle") ||
+      condition.includes("shower") ||
+      condition.includes("storm") ||
+      condition.includes("orage")
+    ) {
+      if (!rainOverlay) {
+        const RainLayer = L.Control.extend({
+          onAdd: function () {
+            const img = L.DomUtil.create("img");
+            img.src = "./assets/images/rain-overlay.gif";
+            img.style.position = "absolute";
+            img.style.top = 0;
+            img.style.left = 0;
+            img.style.width = "80%";
+            img.style.height = "80%";
+            img.style.pointerEvents = "none";
+            img.style.zIndex = 400;
+            return img;
+          }
+        });
+
+        rainOverlay = new RainLayer({ position: "topright" });
+        rainOverlay.addTo(map);
       }
+    } else {
+      if (rainOverlay) {
+        map.removeControl(rainOverlay);
+        rainOverlay = null; 
+      }
+    }
+  } catch (err) {
+    console.error("❌ Erreur mise à jour pluie : ", err);
+  }
+}
 
       checkWeatherAlert(currentWeather); // <- Appel déplacé ici pour éviter doublon
   
@@ -674,7 +711,7 @@ let miniMap;
 // 1. Ajouter le toggle "Animation du vent"
 
 function displayMap(lat, lon) {
-  updateRainOverlay(lat, lon);
+
 
     const apiKey = "4e961e64c39ef786890e2a72153035ef";
   
@@ -682,60 +719,6 @@ function displayMap(lat, lon) {
       map = L.map("map").setView([lat, lon], 10);
              
 
-            // Checkbox animation du vent
-            const windCheckboxControl = L.control({ position: "topright" });
-            windCheckboxControl.onAdd = function () {
-            const div = L.DomUtil.create("div", "map-layer-toggle");
-            div.innerHTML = `
-                <label style="display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #f0f8ff;
-            color: #333;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            cursor: pointer">
-                <input type="checkbox" id="wind-animation-checkbox" style="margin-right: 6px;" />
-                <span>🌬️ Animation du vent</span>
-                </label>
-            `;
-            return div;
-            };
-            windCheckboxControl.addTo(map);
-
-            let windyIframeControl;
-
-            document.getElementById("wind-animation-checkbox").addEventListener("change", function (e) {
-            if (e.target.checked) {
-                // Afficher l'iframe Windy
-                if (!windyIframeControl) {
-                windyIframeControl = L.control({ position: "bottomright" });
-                windyIframeControl.onAdd = function () {
-                    const div = L.DomUtil.create("div", "windy-iframe-container");
-                    div.innerHTML = `
-                    <iframe 
-                        width="400" 
-                        title="Animation du vent - Windy"
-                        height="300"
-                        src="https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=400&height=300&zoom=7&level=surface&overlay=wind"
-                        frameborder="0"
-                        style="border-radius: 8px;">
-                    </iframe>`;
-                    return div;
-                };
-                windyIframeControl.addTo(map);
-                }
-            } else {
-                // Retirer l'iframe Windy si décoché
-                if (windyIframeControl) {
-                map.removeControl(windyIframeControl);
-                windyIframeControl = null;
-                }
-            }
-            });
 
         const baseLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
             attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
@@ -844,33 +827,8 @@ function displayMap(lat, lon) {
       };
       legend.addTo(map);
       
-      let windLayer; // Place ça avant les contrôles
-
-      document.getElementById("wind-animation-checkbox").addEventListener("change", function (e) {
-        if (e.target.checked) {
-            fetch("./assets/data/wind-sample.json") // <- METS le fichier ici
-            .then(res => res.json())
-            .then(data => {
-            windLayer = L.velocityLayer({
-              displayValues: true,
-              displayOptions: {
-                velocityType: "Vent",
-                displayPosition: "bottomleft",
-                displayEmptyString: "Pas de données",
-                angleConvention: "bearingCW",
-                speedUnit: "m/s"
-              },
-              data: module.convertToVelocityFormat(data),
-              maxVelocity: 25
-            }).addTo(map);
-          });
-        } else {
-          if (windLayer) {
-            map.removeLayer(windLayer);
-            windLayer = null;
-          }
-        }
-      });
+    
+      
       
     } else {
       map.setView([lat, lon], 10);
@@ -885,66 +843,12 @@ function displayMap(lat, lon) {
       }).addTo(map);
     }
 
-        const windyControl = L.control({ position: "bottomright" });
-        windyControl.onAdd = function () {
-        const div = L.DomUtil.create("div", "windy-iframe-container");
-        div.style.display = "none"; // cachée par défaut
-        div.innerHTML = `
-        <iframe id="windy-iframe" width="300" height="200"
-            src="https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=300&height=200&zoom=7"
-            frameborder="0">
-        </iframe>`;
-        return div;
-        };
-        windyControl.addTo(map);
+       
 
-        // Référence pour toggler
-        setTimeout(() => {
-        const iframeContainer = document.querySelector(".windy-iframe-container");
-        const windyToggle = document.getElementById("windy-iframe-toggle");
-        if (iframeContainer && windyToggle) {
-        windyToggle.addEventListener("change", () => {
-            iframeContainer.style.display = windyToggle.checked ? "block" : "none";
-        });
-        }
-        }, 500);
-        let rainOverlay = null;
+      
+        // 🔁 1. AJOUTE CE BLOC AVANT SON UTILISATION
 
-        async function updateRainOverlay(lat, lon) {
-          // Récupère les données météo actuelles
-          try {
-            const weather = await getWeatherData(lat, lon);
-            const condition = weather.weather[0].main.toLowerCase(); // ex: "Rain", "Clouds"
-        
-            if (condition.includes("rain") || condition.includes("drizzle")) {
-              if (!rainOverlay) {
-                const RainLayer = L.Control.extend({
-                  onAdd: function () {
-                    const img = L.DomUtil.create("img");
-                    img.src = "./assets/images/rain-overlay.gif";
-                    img.style.position = "absolute";
-                    img.style.top = 0;
-                    img.style.left = 0;
-                    img.style.width = "100%";
-                    img.style.height = "100%";
-                    img.style.pointerEvents = "none";
-                    img.style.zIndex = 400;
-                    return img;
-                  }
-                });
-                rainOverlay = new RainLayer({ position: "topright" });
-                rainOverlay.addTo(map);
-              }
-            } else {
-              if (rainOverlay) {
-                map.removeControl(rainOverlay);
-                rainOverlay = null;
-              }
-            }
-          } catch (err) {
-            console.error("❌ Erreur mise à jour pluie : ", err);
-          }
-        }
+
   }
 
 // Charger l'historique au chargement initial

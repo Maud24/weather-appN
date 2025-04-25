@@ -8,7 +8,7 @@
     {
       "src": "./assets/images/weather_icons/meteo.png",
       "sizes": "2400x2400",
-      "type": "image/jpg"
+      "type": "image/png"
     }
   ]
 }

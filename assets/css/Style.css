@@ -103,6 +103,17 @@
   --light-on-surface: #333333;
 }
 
+
+body[data-theme="light"] .bouton1 {
+  background-color: black;
+  color: white; /* couleur plus douce pour l'indice de saisie */
+}
+
+body[data-theme="light"] .card1 {
+  background-color: white;
+  color: black; /* couleur plus douce pour l'indice de saisie */
+}
+
 body[data-theme="light"] {
   background-color: var(--light-background);
   color: var(--light-on-background);
@@ -1557,7 +1568,7 @@ article.container::before {
 /* Icône du chatbot toujours visible */
 #chatbot-toggle {
   position: fixed;
-  top: 20px;
+  top: 30px;
   right: 20px;
   z-index: 9999;
   font-size: 20px;
@@ -1660,7 +1671,7 @@ article.container::before {
   background-color: #e9f6ff;
   border-left: 4px solid #007bff;
   border-radius: 5px;
-  color: #333;
+  color: #333 ;
   margin-top: 10px;
   line-height: 1.5;
 }
@@ -1688,3 +1699,184 @@ article.container::before {
 }
 
 
+
+/* === AJOUT MENU FIXE ET COMPACT AVEC CORRECTIONS === */
+/* Style de base transparent */
+.floating-menu {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+}
+
+.menu-toggle {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.floating-dropdown {
+  display: none;
+  margin-top: 12px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  min-width: 220px;
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+}
+
+.floating-dropdown h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: #00796b;
+  text-align: center;
+}
+
+.floating-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.floating-dropdown li {
+  margin-bottom: 10px;
+}
+
+.floating-dropdown a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.submenu {
+  margin-top: 6px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.submenu.hidden {
+  display: none;
+}
+
+.submenu a {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.zone-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  #chatbot-toggle {
+    top: 20px; /* descend encore un peu sur mobile */
+    right: 16px;
+  }
+
+  .btn-primary[data-current-location-btn] {
+    margin-right: 60px; /* pour éviter qu'elle touche l'icône du chatbot */
+  }
+}
+
+
+
+.container1 {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.city-form {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+input[type="text1"] {
+  padding: 10px;
+  width: 250px;
+  border: 1px solid white;
+  border-radius: 6px;
+}
+.bouton1 {
+  padding: 10px 16px;
+  background: #B5A1E5;
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.cards1 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.card1 {
+  background: rgb(46, 46, 46);
+  border-radius: 12px;
+  padding: 20px;
+  width: 250px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  position: relative;
+}
+.card .title-7 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: black;
+}
+
+.delete-btn {
+position: absolute;
+top: 10px;
+right: 10px;
+background: #ff4d4d;
+color: white;
+border: none;
+border-radius: 50%;
+width: 28px;
+height: 28px;
+font-size: 20px;
+font-weight: bold;
+cursor: pointer;
+line-height: 26px;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+transition: background 0.2s ease;
+}
+.delete-btn:hover {
+background: #c30000;
+}
+
+
+
+@media (max-width: 600px) {
+  .card1 {
+    width: 90%;
+  }
+  input[type="text1"] {
+    width: 90%;
+  }
+}

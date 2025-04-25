@@ -43,7 +43,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="WeathApp" />
-  <link rel="apple-touch-icon" href="./assets/images/app-icon.jpg" />
+  <link rel="apple-touch-icon" href="./assets/images/meteo.png" />
 
 
 
@@ -79,6 +79,27 @@
 
         <!-- Icône du chatbot -->
         <button id="chatbot-toggle" class="icon-btn has-state" aria-label="Ouvrir le chatbot" type="button" title="Ouvrir le Chatbot">💬</button>
+
+       <!-- Bouton flottant -->
+<div class="floating-menu" id="floatingMenu">
+  <div class="menu-toggle" onclick="toggleFloatingMenu()">☰</div>
+  <nav class="floating-dropdown" id="floatingDropdown">
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#/weather?lat=4.055897&lon=9.667027796676162">Accueil</a></li>
+      <li class="submenu-toggle">
+        <a href="javascript:void(0)" onclick="toggleSubmenu(this)">Compte</a>
+        <div class="submenu hidden">
+          <a href="connexion.html">Connexion</a>
+          <a href="inscription.html">Créer un compte</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+        
+
       </div>
 
  
@@ -122,12 +143,126 @@
             <h2 class="title-2">Courbe des températures</h2>
             <canvas id="temperatureChart" width="100%" height="200"></canvas>
           </section>
-          
+
+
+          <div class="container1">
+      <h2 class="title-2">Mon tableau de bord</h2>       
+            <form class="city-form">
+              <input type="text1" id="city-input" placeholder="Ajouter une ville..." list="suggestions" required />
+              <datalist id="suggestions"></datalist>
+              <button class="bouton1" type="submit">Ajouter</button>
+            </form>
+        
+            <div class="cards1" id="city-cards"></div>
+          </div>
+        
+          <script type="module">
+            import { fetchData, url } from './assets/js/api.js';
+        
+            const cityInput = document.getElementById('city-input');
+            const cityCards = document.getElementById('city-cards');
+            const suggestions = document.getElementById('suggestions');
+            const storageKey = "dashboard-cities";
+            let addedCities = JSON.parse(localStorage.getItem(storageKey)) || [];
+        
+            async function renderCities() {
+          cityCards.innerHTML = '';
+          let alertCount = 0;
+        
+          for (const city of addedCities) {
+            await fetchData(url.currentWeather(city.lat, city.lon), (data) => {
+              const temp = Math.round(data.main.temp);
+              const weather = data.weather[0].main.toLowerCase();
+        
+              // Badge météo
+              if (weather.includes("rain") || weather.includes("storm") || weather.includes("thunder")) {
+                alertCount++;
+              }
+        
+              const card = document.createElement("div");
+              card.className = "card1";
+        
+              const deleteBtn = document.createElement("button");
+              deleteBtn.className = "delete-btn";
+              deleteBtn.setAttribute("aria-label", `Supprimer ${city.name}`);
+              deleteBtn.innerHTML = "&times;";
+              deleteBtn.addEventListener("click", () => {
+                addedCities = addedCities.filter(c => c.name !== city.name);
+                localStorage.setItem(storageKey, JSON.stringify(addedCities));
+                renderCities(); // Re-render
+              });
+        
+              const title = document.createElement("title-7");
+              title.textContent = city.name;
+        
+              const tempElem = document.createElement("p");
+              tempElem.textContent = `${temp}°C`;
+        
+              card.appendChild(deleteBtn);
+              card.appendChild(title);
+              card.appendChild(tempElem);
+              cityCards.appendChild(card);
+            });
+          }
+        
+          // Badge
+          if ('setAppBadge' in navigator && alertCount > 0) {
+            navigator.setAppBadge(alertCount).catch(() => {});
+          } else if ('clearAppBadge' in navigator) {
+            navigator.clearAppBadge().catch(() => {});
+          }
+        }
+        
+        
+            document.querySelector(".city-form").addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const cityName = cityInput.value.trim();
+              if (!cityName) return;
+        
+              fetchData(url.geo(cityName), (results) => {
+                if (results.length === 0) {
+                  alert("Ville introuvable !");
+                  return;
+                }
+                const match = results[0];
+                const exists = addedCities.find(c => c.name.toLowerCase() === match.name.toLowerCase());
+                if (!exists) {
+                  const newCity = {
+                    name: match.name,
+                    lat: match.lat,
+                    lon: match.lon
+                  };
+                  addedCities.push(newCity);
+                  localStorage.setItem(storageKey, JSON.stringify(addedCities));
+                  renderCities();
+                } else {
+                  alert("Ville déjà ajoutée !");
+                }
+                cityInput.value = '';
+              });
+            });
+        
+            cityInput.addEventListener("input", () => {
+              const query = cityInput.value.trim();
+              if (query.length < 2) return;
+              fetchData(url.geo(query), (data) => {
+                suggestions.innerHTML = '';
+                data.forEach(city => {
+                  const option = document.createElement("option");
+                  option.value = city.name;
+                  suggestions.appendChild(option);
+                });
+              });
+            });
+        
+            renderCities();
+          </script>
+        
         
 
         <!-- Footer -->
         <footer class="footer">
-          <p class="body-3">Copyright 2025 with codewithaudrey. All Rights Reserved.</p>
+          <p class="body-3">Copyright 2025 with Maud24. All Rights Reserved.</p>
           <p class="body-3">
             Powered By
             <a href="https://openweathermap.org/api" title="Free OpenWeather API" target="_blank" rel="noopener">
@@ -142,11 +277,12 @@
     </article>
   </main>
 
+  
   <!-- SECTION 404 -->
   <section class="error-content" data-error-content>
     <h2 class="heading">404</h2>
     <p class="body-1">Page non trouvée !</p>
-    <a href="#/weather?lat=51.5073219&lon=-0.1276474" class="btn-primary">
+    <a href="#/weather?lat=4.055897&lon=9.667027796676162" class="btn-primary">
       <span class="span">Accueil</span>
     </a>
   </section>
@@ -190,6 +326,38 @@
       document.body.dataset.theme = document.body.dataset.theme === "light" ? "" : "light";
     }
   </script>
+  
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
+  
+    function toggleSubmenu(el) {
+  const submenu = el.nextElementSibling;
+  if (submenu) {
+    submenu.classList.toggle("hidden");
+  }
+}
+
+  </script>
+
+<script>
+  function toggleFloatingMenu() {
+    const menu = document.getElementById("floatingDropdown");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  }
+
+  // Fermer le menu en cliquant ailleurs
+  document.addEventListener("click", function (e) {
+    const menu = document.getElementById("floatingDropdown");
+    const toggle = document.querySelector(".menu-toggle");
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      menu.style.display = "none";
+    }
+  });
+</script>
+
+
   
 
 </body>

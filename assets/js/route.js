@@ -8,7 +8,7 @@
 'use strict';
 
 import { updateWeather, error404 } from "./App1.js";
-const defaultLocation = "#/weather?lat=51.5073219&lon=-0.1276474"; // London
+const defaultLocation = "#/weather?lat=4.055897&lon=9.667027796676162" // Communaute urbaine de Douala
 
 // Fonction pour obtenir la position actuelle
 const currentLocation = () => {
@@ -53,7 +53,7 @@ window.addEventListener("hashchange", checkHash, { passive: true });
 window.addEventListener("load", () => {
     if (!window.location.hash) {
       // Par défaut, on ne déclenche pas la géolocalisation sans action utilisateur
-      window.location.hash = "#/weather?lat=51.5073219&lon=-0.1276474"; // London (ou autre ville par défaut)
+      window.location.hash = "#/weather?lat=4.055897&lon=9.667027796676162"; // Communaute urbaine de Douala
     } else {
       checkHash();
     }

@@ -1,8 +1,8 @@
 /**
  * @license MIT
  * @fileoverview All module functions
- * @copyright codewithsadee 2023 All rights reserved
- * @author codewithsadee <mohammadsadee24@gmail.com>
+ * @copyright Maud24 2025 All rights reserved
+ * @author Maud24 <ondiguimarine@gmail.com>
  */
 
 'use strict';
@@ -88,23 +88,23 @@ export const mps_to_kmh = mps => mps * 3.6;
 export const aqiText = {
     1: {
         level: "Good",
-        message: "Air quality is considered satisfactory, and air pollution poses little or no risk"
+        message: "La qualité de l’air est considérée comme satisfaisante et la pollution de l’air ne présente que peu ou pas de risque."
     },
     2: {
         level: "Fair",
-        message: "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number who are unusually sensitive to air pollution."
+        message: "La qualité de l’air est acceptable ; Cependant, pour certains polluants, il peut y avoir un problème de santé modéré pour un très petit nombre qui sont exceptionnellement sensibles à la pollution atmosphérique."
     },
     3: {
         level: "Moderate",
-        message: "Members of sensitive groups may experience health effects. The general public is not likely to be affected"
+        message: "Les membres de groupes sensibles peuvent ressentir des effets sur la santé. Il est peu probable que le grand public soit touché."
     },
     4: {
         level: "Poor",
-        message: "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects."
+        message: "Tout le monde peut commencer à ressentir des effets sur la santé ; Les membres de groupes sensibles peuvent subir des effets plus graves sur leur santé."
     },
     5: {
         level: "Very Poor",
-        message: "Health warnings of emergency conditions. The entire population is more likely to be affected."
+        message: "Avertissements sanitaires en cas d’urgence. L’ensemble de la population est plus susceptible d’être touché."
     }
 }
 
