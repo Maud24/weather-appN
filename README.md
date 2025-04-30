@@ -15,9 +15,8 @@ WeatherIO est une application météo complète, interactive et moderne, conçue
 
 ## 🌐 Démo
 
-🔗 [Voir la démo en ligne](https://ton-nom.github.io/weatherio-starter)
+🔗 [Voir la démo en ligne](https://weather-fzoapqhna-ondigui-marines-projects.vercel.app/)
 
-*(Remplace le lien par l’URL GitHub Pages de ton projet)*
 
 ---
 
